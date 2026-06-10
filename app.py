@@ -14,6 +14,12 @@ if os.environ.get('TRANSCRICAO_SKIP_SSL', '').lower() == 'true':
     os.environ['HF_HUB_DISABLE_SSL_VERIFY'] = '1'
     os.environ['CURL_CA_BUNDLE'] = ''
     os.environ['REQUESTS_CA_BUNDLE'] = ''
+    os.environ['HF_HUB_OFFLINE'] = '1'  # Forca modo offline se modelo ja existe local
+    os.environ['TRANSFORMERS_OFFLINE'] = '1'  # Evita checks online
+    
+# Configuracoes gerais para evitar warnings e checks desnecessarios
+os.environ['HF_HUB_DISABLE_TELEMETRY'] = '1'
+os.environ['HF_HUB_DISABLE_IMPLICIT_TOKEN'] = '1'
 
 st.set_page_config(
     page_title="Transcrição de Áudio",
@@ -26,10 +32,25 @@ MODEL_SIZES = ["tiny", "base", "small", "medium", "large-v1", "large-v2", "large
 
 def load_model(model_size):
     """Carrega o modelo Whisper com o tamanho especificado (CPU only)."""
-    # Sempre usar CPU para máxima compatibilidade entre computadores
+    # Sempre usar CPU para maxima compatibilidade entre computadores
     device = "cpu"
     compute_type = "int8"
     
+    # Se modo offline ativo, tentar usar cache local
+    if os.environ.get('HF_HUB_OFFLINE') == '1':
+        try:
+            model = WhisperModel(
+                model_size, 
+                device=device, 
+                compute_type=compute_type,
+                local_files_only=True
+            )
+            return model, device
+        except Exception:
+            # Ignora erro e tenta modo normal
+            pass
+    
+    # Carregar normalmente (tenta baixar se nao existir)
     model = WhisperModel(model_size, device=device, compute_type=compute_type)
     return model, device
 
@@ -158,8 +179,9 @@ def main():
                     
                     **Opcao 3 - Download manual do modelo:**
                     Se o erro persistir, baixe o modelo manualmente e coloque na pasta:
-                    `~/.cache/huggingface/hub/` (Linux) ou `%USERPROFILE%\.cache\huggingface\hub\` (Windows)
-                    """)
+                    `~/.cache/huggingface/hub/` (Linux) ou `%USERPROFILE%.cache\huggingface\hub\` (Windows)
+                    """
+                )
                 else:
                     st.error(f"❌ Erro durante a transcricao: {error_msg}")
                     st.info("💡 Dica: Verifique se o arquivo de audio nao esta corrompido e se ha memoria disponivel.")
