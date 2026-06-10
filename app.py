@@ -2,7 +2,18 @@ import streamlit as st
 import os
 import tempfile
 import time
+import ssl
+import urllib3
 from faster_whisper import WhisperModel
+
+# Configuracao para ambientes corporativos com proxy SSL
+# Defina TRANSCRICAO_SKIP_SSL=true para ignorar verificacao SSL
+if os.environ.get('TRANSCRICAO_SKIP_SSL', '').lower() == 'true':
+    ssl._create_default_https_context = ssl._create_unverified_context
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+    os.environ['HF_HUB_DISABLE_SSL_VERIFY'] = '1'
+    os.environ['CURL_CA_BUNDLE'] = ''
+    os.environ['REQUESTS_CA_BUNDLE'] = ''
 
 st.set_page_config(
     page_title="Transcrição de Áudio",
@@ -125,8 +136,33 @@ def main():
                 )
                 
             except Exception as e:
-                st.error(f"❌ Erro durante a transcrição: {str(e)}")
-                st.info("💡 Dica: Verifique se o arquivo de áudio não está corrompido e se há memória disponível.")
+                error_msg = str(e)
+                
+                # Detectar erro SSL comum em redes corporativas
+                if "CERTIFICATE_VERIFY_FAILED" in error_msg or "SSL" in error_msg:
+                    st.error("❌ Erro de certificado SSL - Rede corporativa detectada")
+                    st.markdown("""
+                    **Possiveis solucoes:**
+                    
+                    **Opcao 1 - Modo Corporativo (Recomendado):**
+                    1. Feche a aplicacao
+                    2. Execute no terminal/cmd:
+                       ```
+                       set TRANSCRICAO_SKIP_SSL=true
+                       ```
+                    3. Rode novamente: `run.bat` (Windows) ou `./run.sh` (Linux)
+                    
+                    **Opcao 2 - Configurar certificado corporativo:**
+                    Solicite ao departamento de TI o certificado raiz da empresa
+                    e configure nas variaveis de ambiente.
+                    
+                    **Opcao 3 - Download manual do modelo:**
+                    Se o erro persistir, baixe o modelo manualmente e coloque na pasta:
+                    `~/.cache/huggingface/hub/` (Linux) ou `%USERPROFILE%\.cache\huggingface\hub\` (Windows)
+                    """)
+                else:
+                    st.error(f"❌ Erro durante a transcricao: {error_msg}")
+                    st.info("💡 Dica: Verifique se o arquivo de audio nao esta corrompido e se ha memoria disponivel.")
             
             finally:
                 if 'tmp_path' in locals() and os.path.exists(tmp_path):

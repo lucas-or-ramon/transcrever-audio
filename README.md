@@ -48,6 +48,8 @@ O `setup.bat` faz tudo automaticamente:
 
 O `run.bat` configura o PATH temporariamente e inicia o Streamlit.
 
+> **Rede corporativa/proxy?** Se receber erro de SSL, use `run-corporativo.bat` em vez de `run.bat`
+
 ---
 
 ### WSL / Linux / macOS (Scripts Automáticos)
@@ -67,6 +69,8 @@ O `setup.sh` faz automaticamente:
 - ⬇️ Instala FFmpeg via apt (WSL/Linux) ou brew (macOS)
 - 🐍 Cria ambiente virtual
 - 📦 Instala dependências
+
+> **Rede corporativa/proxy?** Se receber erro de SSL, use `./run-corporativo.sh` em vez de `./run.sh`
 
 ---
 
@@ -114,16 +118,18 @@ O navegador abrirá automaticamente em `http://localhost:8501`
 
 ```
 transcrever-texto/
-├── app.py                 # Aplicação principal (Streamlit)
-├── requirements.txt       # Dependências Python
-├── .gitignore            # Arquivos ignorados pelo Git
-├── setup.bat             # Script de instalação (Windows CMD)
-├── run.bat               # Script de execução (Windows CMD)
-├── setup.sh              # Script de instalação (Linux/WSL)
-├── run.sh                # Script de execução (Linux/WSL)
-├── ffmpeg/               # FFmpeg portable (Windows - baixado automaticamente)
-├── README.md             # Este arquivo
-└── venv/                 # Ambiente virtual (criado na instalação)
+├── app.py                    # Aplicacao principal (Streamlit)
+├── requirements.txt          # Dependencias Python
+├── .gitignore               # Arquivos ignorados pelo Git
+├── setup.bat                # Instalacao Windows
+├── run.bat                  # Execucao Windows
+├── run-corporativo.bat      # Execucao Windows (rede corporativa/proxy SSL)
+├── setup.sh                 # Instalacao Linux/WSL
+├── run.sh                   # Execucao Linux/WSL
+├── run-corporativo.sh       # Execucao Linux/WSL (rede corporativa/proxy SSL)
+├── ffmpeg/                  # FFmpeg portable (Windows)
+├── README.md                # Este arquivo
+└── venv/                    # Ambiente virtual (criado na instalacao)
 ```
 
 ---
@@ -168,10 +174,21 @@ transcrever-texto/
 
 | Problema | Solução |
 |----------|---------|
-| `ffmpeg not found` | Instale o FFmpeg (veja seção de pré-requisitos) |
+| `ffmpeg not found` | Instale o FFmpeg (veja secao de pre-requisitos) |
 | `Out of memory` | Use um modelo menor (tiny/base) ou feche outros programas |
-| Modelo não baixa | Verifique conexão com internet (apenas na 1ª vez) |
-| Transcrição lenta | Use modelo menor (tiny/base) ou upgrade de RAM |
+| Modelo nao baixa | Verifique conexao com internet (apenas na 1a vez) |
+| Transcricao lenta | Use modelo menor (tiny/base) ou upgrade de RAM |
+| `SSL: CERTIFICATE_VERIFY_FAILED` | **Rede corporativa/proxy** - Execute o script `run-corporativo.bat` (Windows) ou `./run-corporativo.sh` (Linux) |
+
+### Erro SSL em Redes Corporativas
+
+Se voce receber erro de certificado SSL (`CERTIFICATE_VERIFY_FAILED`), provavelmente esta em uma rede corporativa com proxy/firewall que intercepta conexoes.
+
+**Solucao rapida:**
+- **Windows**: Execute `run-corporativo.bat` em vez de `run.bat`
+- **Linux/WSL**: Execute `./run-corporativo.sh` em vez de `./run.sh`
+
+Estes scripts desabilitam a verificacao SSL apenas para download dos modelos da Hugging Face. **Use apenas em redes corporativas confiaveis.**
 
 ---
 
