@@ -1,0 +1,111 @@
+# ==========================================
+# Python
+# ==========================================
+# Ambiente virtual
+venv/
+env/
+ENV/
+.venv/
+
+# Arquivos compilados Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# ==========================================
+# IDEs e Editores
+# ==========================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+
+# ==========================================
+# Jupyter Notebook
+# ==========================================
+.ipynb_checkpoints
+
+# ==========================================
+# Streamlit
+# ==========================================
+.streamlit/
+
+# ==========================================
+# Modelos Whisper (baixados automaticamente)
+# ==========================================
+# Modelos são grandes (~1-3GB cada), não versionar
+models/
+*.bin
+*.pt
+*.pth
+*.ckpt
+
+# Cache Hugging Face
+.cache/
+huggingface/
+transformers/
+
+# ==========================================
+# FFmpeg (baixado automaticamente no Windows)
+# ==========================================
+ffmpeg/
+!ffmpeg/.gitkeep
+
+# ==========================================
+# Arquivos de Áudio (uploads temporários)
+# ==========================================
+*.mp3
+*.wav
+*.m4a
+*.flac
+*.ogg
+*.wma
+*.aac
+uploads/
+temp/
+tmp/
+
+# ==========================================
+# Arquivos de Transcrição (gerados pelo usuário)
+# ==========================================
+# Opcional: descomente se não quiser versionar transcrições
+# *.txt
+# transcriptions/
+# output/
+
+# ==========================================
+# Logs e Dados
+# ==========================================
+*.log
+logs/
+*.sqlite
+*.db
+
+# ==========================================
+# Sistema Operacional
+# ==========================================
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
