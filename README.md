@@ -178,7 +178,7 @@ transcrever-texto/
 | `Out of memory` | Use um modelo menor (tiny/base) ou feche outros programas |
 | Modelo nao baixa | Verifique conexao com internet (apenas na 1a vez) |
 | Transcricao lenta | Use modelo menor (tiny/base) ou upgrade de RAM |
-| `SSL: CERTIFICATE_VERIFY_FAILED` | **Rede corporativa/proxy** - Execute o script `run-corporativo.bat` (Windows) ou `./run-corporativo.sh` (Linux) |
+| `SSL: CERTIFICATE_VERIFY_FAILED` | **Rede corporativa/proxy** - Tente `run-corporativo.bat` ou baixe manualmente (veja secao "Download Manual do Modelo" abaixo) |
 
 ### Erro SSL em Redes Corporativas
 
@@ -192,7 +192,52 @@ Estes scripts desabilitam a verificacao SSL apenas para download dos modelos da 
 
 ---
 
-## 📄 Licença
+## � Download Manual do Modelo (Redes Corporativas)
+
+Se os scripts automaticos nao conseguirem baixar o modelo devido a restricoes de proxy/firewall corporativo, siga estes passos:
+
+### Windows
+
+1. **Baixe o modelo manualmente pelo navegador:**
+   - Acesse: https://huggingface.co/Systran/faster-whisper-base/tree/main
+   - Clique em cada arquivo abaixo e baixe:
+     - `model.bin` (~74 MB)
+     - `config.json` (~2 KB)
+     - `tokenizer.json` (~1 MB)
+     - `vocabulary.txt` (~400 KB)
+
+2. **Crie a pasta de destino:**
+   ```
+   %USERPROFILE%\.cache\huggingface\hub\models--Systran--faster-whisper-base\snapshots\main\
+   ```
+
+3. **Copie os 4 arquivos baixados** para essa pasta
+
+4. **Execute a aplicacao:** `run.bat`
+
+### Linux/WSL
+
+1. **Baixe o modelo manualmente pelo navegador:**
+   - Acesse: https://huggingface.co/Systran/faster-whisper-base/tree/main
+   - Baixe: `model.bin`, `config.json`, `tokenizer.json`, `vocabulary.txt`
+
+2. **Crie a pasta de destino:**
+   ```bash
+   mkdir -p ~/.cache/huggingface/hub/models--Systran--faster-whisper-base/snapshots/main/
+   ```
+
+3. **Copie os arquivos** (ajuste o caminho de origem):
+   ```bash
+   cp ~/Downloads/model.bin ~/Downloads/config.json ~/Downloads/tokenizer.json ~/Downloads/vocabulary.txt ~/.cache/huggingface/hub/models--Systran--faster-whisper-base/snapshots/main/
+   ```
+
+4. **Execute a aplicacao:** `./run.sh`
+
+> **Nota:** Uma vez copiado, o modelo fica salvo e nao precisa ser baixado novamente.
+
+---
+
+## �� Licença
 
 Projeto open-source. Utiliza:
 - [Whisper](https://github.com/openai/whisper) - OpenAI

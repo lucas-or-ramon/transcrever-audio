@@ -113,4 +113,9 @@ echo ==========================================
 echo.
 echo Agora voce pode executar: run.bat
 echo.
+echo IMPORTANTE: O modelo sera baixado automaticamente na 1a transcricao.
+echo Se tiver problemas com SSL/proxy em rede corporativa:
+echo    1. Tente: run-corporativo.bat
+echo    2. Ou baixe manualmente (veja README.md)
+echo.
 pause
